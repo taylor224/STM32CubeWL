@@ -75,8 +75,6 @@ typedef enum
 #define RX_TIME_MARGIN                200
 /* Afc bandwidth in Hz */
 #define FSK_AFC_BANDWIDTH             83333
-/* LED blink Period*/
-#define LED_PERIOD_MS                 200
 
 /* USER CODE END PD */
 
@@ -102,8 +100,6 @@ uint16_t RxBufferSize = 0;
 int8_t RssiValue = 0;
 /* Last  Received packer SNR (in Lora modulation)*/
 int8_t SnrValue = 0;
-/* Led Timers objects*/
-static UTIL_TIMER_Object_t timerLed;
 /* random delay to make sure 2 devices will sync*/
 /* the closest the random delays are, the longer it will
    take for the devices to sync when started simultaneously*/
@@ -142,11 +138,6 @@ static void OnRxTimeout(void);
 static void OnRxError(void);
 
 /* USER CODE BEGIN PFP */
-/**
-  * @brief  Function executed on when led timer elapses
-  * @param  context ptr of LED context
-  */
-static void OnledEvent(void *context);
 
 /**
   * @brief Command state machine implementation
@@ -173,9 +164,6 @@ void SubghzApp_Init(void)
           (uint8_t)(SUBGHZ_PHY_VERSION_SUB1),
           (uint8_t)(SUBGHZ_PHY_VERSION_SUB2));
 
-  /* Led Timers*/
-  UTIL_TIMER_Create(&timerLed, LED_PERIOD_MS, UTIL_TIMER_ONESHOT, OnledEvent, NULL);
-  UTIL_TIMER_Start(&timerLed);
   /* USER CODE END SubghzApp_Init_1 */
 
   /* Radio initialization */
@@ -327,14 +315,8 @@ static void Command_Process(void)
       {
         if (strncmp((const char *)BufferRx, COMMAND_OFF, sizeof(COMMAND_OFF) - 1) == 0)
         {
-          // UTIL_TIMER_Stop(&timerLed);
-          // /* switch off red led */
-          // HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET); /* LED_RED */
-          // /* slave toggles green led */
-          // HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin); /* LED_GREEN */
-          // /* Add delay between RX and TX */
-          // HAL_Delay(Radio.GetWakeupTime() + RX_TIME_MARGIN);
-          /*slave sends PONG*/
+          HAL_GPIO_WritePin(PA0_GPIO_Port, PA0_Pin, GPIO_PIN_RESET);
+          
           APP_LOG(TS_ON, VLEVEL_L, "..."
                   "COMMAND OFF"
                   "\n\r");
@@ -345,6 +327,9 @@ static void Command_Process(void)
         }
         else if (strncmp((const char *)BufferRx, COMMAND_ON_100, sizeof(COMMAND_ON_100) - 1) == 0)
         {
+          HAL_GPIO_WritePin(PA0_GPIO_Port, PA0_Pin, GPIO_PIN_SET);
+          /* PWN 신호 줘야함 */
+         
           APP_LOG(TS_ON, VLEVEL_L, "..."
                   "COMMAND 100 ON"
                   "\n\r");
@@ -355,6 +340,9 @@ static void Command_Process(void)
         }
         else if (strncmp((const char *)BufferRx, COMMAND_ON_70, sizeof(COMMAND_ON_70) - 1) == 0)
         {
+          HAL_GPIO_WritePin(PA0_GPIO_Port, PA0_Pin, GPIO_PIN_SET);
+          /* PWN 신호 줘야함 */
+          
           APP_LOG(TS_ON, VLEVEL_L, "..."
                   "COMMAND 70 ON"
                   "\n\r");
@@ -365,6 +353,9 @@ static void Command_Process(void)
         }
         else if (strncmp((const char *)BufferRx, COMMAND_ON_50, sizeof(COMMAND_ON_50) - 1) == 0)
         {
+          HAL_GPIO_WritePin(PA0_GPIO_Port, PA0_Pin, GPIO_PIN_SET);
+          /* PWN 신호 줘야함 */
+         
           APP_LOG(TS_ON, VLEVEL_L, "..."
                   "COMMAND 50 ON"
                   "\n\r");
@@ -375,6 +366,9 @@ static void Command_Process(void)
         }
         else if (strncmp((const char *)BufferRx, COMMAND_ON_30, sizeof(COMMAND_ON_30) - 1) == 0)
         {
+          HAL_GPIO_WritePin(PA0_GPIO_Port, PA0_Pin, GPIO_PIN_SET);
+          /* PWN 신호 줘야함 */
+         
           APP_LOG(TS_ON, VLEVEL_L, "..."
                   "COMMAND 30 ON"
                   "\n\r");
