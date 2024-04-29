@@ -204,6 +204,9 @@ void SubghzApp_Init(void)
   /*fills tx buffer*/
   memset(BufferTx, 0x0, MAX_APP_BUFFER_SIZE);
 
+  /* Set PWN Signal */
+  HAL_TIM_PWM_Start (& hitim1, TIM_CHANNEL_1);
+
   APP_LOG(TS_ON, VLEVEL_L, "rand=%d\n\r", random_delay);
   /*starts reception*/
   Radio.Rx(RX_TIMEOUT_VALUE + random_delay);
@@ -315,7 +318,7 @@ static void Command_Process(void)
       {
         if (strncmp((const char *)BufferRx, COMMAND_OFF, sizeof(COMMAND_OFF) - 1) == 0)
         {
-          HAL_GPIO_WritePin(PA0_GPIO_Port, PA0_Pin, GPIO_PIN_RESET);
+          HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
           
           APP_LOG(TS_ON, VLEVEL_L, "..."
                   "COMMAND OFF"
@@ -327,8 +330,9 @@ static void Command_Process(void)
         }
         else if (strncmp((const char *)BufferRx, COMMAND_ON_100, sizeof(COMMAND_ON_100) - 1) == 0)
         {
-          HAL_GPIO_WritePin(PA0_GPIO_Port, PA0_Pin, GPIO_PIN_SET);
-          /* PWN 신호 줘야함 */
+          HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
+          /* PWN */
+          __HAL_TIM_SET_COMPARE (& hitim1, TIM_CHANNEL_1, 1000);
          
           APP_LOG(TS_ON, VLEVEL_L, "..."
                   "COMMAND 100 ON"
@@ -340,8 +344,9 @@ static void Command_Process(void)
         }
         else if (strncmp((const char *)BufferRx, COMMAND_ON_70, sizeof(COMMAND_ON_70) - 1) == 0)
         {
-          HAL_GPIO_WritePin(PA0_GPIO_Port, PA0_Pin, GPIO_PIN_SET);
-          /* PWN 신호 줘야함 */
+          HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
+          /* PWN */
+          __HAL_TIM_SET_COMPARE (& hitim1, TIM_CHANNEL_1, 750);
           
           APP_LOG(TS_ON, VLEVEL_L, "..."
                   "COMMAND 70 ON"
@@ -353,8 +358,9 @@ static void Command_Process(void)
         }
         else if (strncmp((const char *)BufferRx, COMMAND_ON_50, sizeof(COMMAND_ON_50) - 1) == 0)
         {
-          HAL_GPIO_WritePin(PA0_GPIO_Port, PA0_Pin, GPIO_PIN_SET);
-          /* PWN 신호 줘야함 */
+          HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
+          /* PWN */
+          __HAL_TIM_SET_COMPARE (& hitim1, TIM_CHANNEL_1, 500);
          
           APP_LOG(TS_ON, VLEVEL_L, "..."
                   "COMMAND 50 ON"
@@ -366,8 +372,9 @@ static void Command_Process(void)
         }
         else if (strncmp((const char *)BufferRx, COMMAND_ON_30, sizeof(COMMAND_ON_30) - 1) == 0)
         {
-          HAL_GPIO_WritePin(PA0_GPIO_Port, PA0_Pin, GPIO_PIN_SET);
-          /* PWN 신호 줘야함 */
+          HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
+          /* PWN */
+          __HAL_TIM_SET_COMPARE (& hitim1, TIM_CHANNEL_1, 350);
          
           APP_LOG(TS_ON, VLEVEL_L, "..."
                   "COMMAND 30 ON"
